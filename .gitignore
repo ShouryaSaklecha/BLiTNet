@@ -1,0 +1,9 @@
+# build artefacts
+build/
+src/*.o
+
+# MNIST data: fetched by scripts/fetch-data.sh, not tracked (54 MB of binaries)
+data/*-ubyte
+
+# run logs
+run*.txt
