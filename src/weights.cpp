@@ -25,11 +25,11 @@ float Weights::dot(int j, const float* pre) const {
 
 void Weights::stdpExc(const float* pre, const float* postAct, float lr) {
   for (int j = 0; j < nPost; ++j) {
-    if (postAct[j] <= 0.f) continue;          // post must have fired
+    if (postAct[j] <= 0.f) continue;
     float* wr = row(j);
     const uint8_t* mr = &mask[(size_t)j * nPre];
     for (int i = 0; i < nPre; ++i)
-      if (mr[i]) wr[i] += lr * pre[i];         // pre active -> strengthen
+      if (mr[i]) wr[i] += lr * pre[i];
   }
 }
 
@@ -51,11 +51,11 @@ void Weights::stdpInh(const float* pre, const float* postAct, const float* fTgt,
     float* wr = row(j);
     const uint8_t* mr = &mask[(size_t)j * nPre];
     bool fired = postAct[j] > 0.f;
-    float sign = fired ? 1.f : -fTgt[j];       // eq 6 weakening scaled by target
+    float sign = fired ? 1.f : -fTgt[j];
     for (int i = 0; i < nPre; ++i) {
       if (!mr[i]) continue;
       wr[i] += lr * pre[i] * sign;
-      if (wr[i] < 0.f) wr[i] = 0.f;            // magnitude stays non-negative
+      if (wr[i] < 0.f) wr[i] = 0.f;   // magnitude stays non-negative
     }
   }
 }

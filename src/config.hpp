@@ -1,34 +1,25 @@
 #pragma once
-// All tunable parameters in one place. Paper: Stratton et al. 2022 (BLiTNet / STUNN).
-// For MNIST the paper sets noise xi = 0 and constant input c = 0, so balance comes
-// entirely from inhibitory STDP + weight normalisation + threshold plasticity + a
-// spread of target firing rates.
 namespace bn {
 
 struct Config {
   int nInput   = 784;    // 28x28 pixels
-  int nFeature = 500;    // feature-layer neurons (paper sweeps up to ~13000)
+  int nFeature = 500;
   int nClasses = 10;
-  int nTrain   = 60000;  // images for one unsupervised epoch
+  int nTrain   = 60000;
   int nTest    = 10000;
 
-  // Learning rates, annealed to zero across the epoch (eqs 3 and 9).
-  float etaInit    = 0.02f;  // base STDP rate
-  float etaItpMul  = 2.0f;   // ITP rate = 2 * etaInit (eq 9)
+  float etaInit    = 0.02f;  // base learning rate, falls to zero over the epoch
+  float etaItpMul  = 2.0f;   // threshold learning rate = this x etaInit
 
-  // Per-neuron target firing rates, spread low..high (eq 8 targets).
-  // Low rates learn specific digits; high rates learn shared strokes.
-  float fTargetLo = 0.03f;
+  float fTargetLo = 0.03f;   // per-neuron target firing rates, spread lo..hi
   float fTargetHi = 0.20f;
 
-  // Connection probabilities. Excitatory full, inhibitory sparse (eq 5 uses p).
-  float pExc = 1.0f;
-  float pInh = 0.10f;
+  float pExc = 1.0f;         // excitatory fully connected
+  float pInh = 0.10f;        // inhibitory sparse
 
-  // Mean input activity, used for the normalisation constant k (eq 5).
-  float inputMeanRate = 0.13f;   // measured from MNIST at load time, overwritten
+  float inputMeanRate = 0.13f;  // measured from the data at load time
 
-  float ridgeLambda = 5.0f;      // linear-decoder regularisation
+  float ridgeLambda = 5.0f;
   unsigned seed = 1234;
 };
 

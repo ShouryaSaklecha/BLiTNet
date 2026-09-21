@@ -4,30 +4,29 @@
 
 namespace bn {
 
-// Train ridge weights W (D x nClasses, D = dim+1) from a feature provider.
 static std::vector<double> trainRidge(
     int dim, int nClasses, int n,
     const std::function<const float*(int)>& feat,
     const std::function<uint8_t(int)>& label, float lambda) {
-  int D = dim + 1;                       // extra column is the bias term
+  int D = dim + 1;                       // last column is the bias
   std::vector<double> A((size_t)D * D, 0.0), B((size_t)D * nClasses, 0.0);
   std::vector<float> x(D);
 
   for (int s = 0; s < n; ++s) {
     const float* f = feat(s);
     for (int i = 0; i < dim; ++i) x[i] = f[i];
-    x[dim] = 1.0f;                        // bias
+    x[dim] = 1.0f;
     int y = label(s);
     for (int r = 0; r < D; ++r) {
       double xr = x[r];
       if (xr == 0.0) continue;
       double* Ar = &A[(size_t)r * D];
       for (int c = 0; c < D; ++c) Ar[c] += xr * x[c];
-      B[(size_t)r * nClasses + y] += xr;   // one-hot target
+      B[(size_t)r * nClasses + y] += xr;
     }
   }
   for (int r = 0; r < D; ++r) A[(size_t)r * D + r] += lambda;
-  solveLinearSystem(A, B, D, nClasses);    // B now holds W
+  solveLinearSystem(A, B, D, nClasses);
   return B;
 }
 
@@ -36,7 +35,7 @@ static int argmaxScore(const std::vector<double>& W, int dim, int nClasses,
   int best = 0;
   double bestv = -1e300;
   for (int c = 0; c < nClasses; ++c) {
-    double s = W[(size_t)dim * nClasses + c];   // bias
+    double s = W[(size_t)dim * nClasses + c];
     for (int i = 0; i < dim; ++i) s += f[i] * W[(size_t)i * nClasses + c];
     if (s > bestv) { bestv = s; best = c; }
   }

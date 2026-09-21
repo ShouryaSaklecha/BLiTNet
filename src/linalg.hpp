@@ -1,10 +1,9 @@
 #pragma once
 #include <vector>
 #include <cmath>
-// Solve A X = B in place by Gaussian elimination with partial pivoting.
-// A is n x n (row-major), B is n x m (row-major). On return B holds X.
 namespace bn {
 
+// solve A X = B by Gaussian elimination with partial pivoting; result overwrites B
 inline void solveLinearSystem(std::vector<double>& A, std::vector<double>& B,
                               int n, int m) {
   auto a = [&](int r, int c) -> double& { return A[(size_t)r * n + c]; };

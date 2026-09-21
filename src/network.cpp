@@ -10,13 +10,13 @@ void Net::build(Rng& rng) {
 void Net::trainFeatures(const Mnist& tr, bool progress) {
   int T = cfg.nTrain < tr.n ? cfg.nTrain : tr.n;
   for (int t = 0; t < T; ++t) {
-    float frac = 1.f - float(t) / float(T);   // anneal 1 -> 0
-    float lr = cfg.etaInit * frac * frac;       // eq 3
-    float lrItp = cfg.etaItpMul * cfg.etaInit * frac * frac;  // eq 9
+    float frac = 1.f - float(t) / float(T);   // 1 at the start, 0 at the end
+    float lr = cfg.etaInit * frac * frac;
+    float lrItp = cfg.etaItpMul * cfg.etaInit * frac * frac;
 
     const float* img = tr.image(t);
-    feature.forward(img);                       // eq 1
-    feature.learn(img, lr, lrItp);              // eqs 2,4,6,7,8
+    feature.forward(img);
+    feature.learn(img, lr, lrItp);
 
     if (progress && (t % 10000 == 0))
       std::printf("  trained %6d / %d images\n", t, T);

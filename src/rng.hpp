@@ -1,7 +1,5 @@
 #pragma once
 #include <random>
-// Deterministic RNG. In hardware this role is an LFSR per neuron; here a seeded
-// Mersenne Twister keeps every run reproducible.
 namespace bn {
 
 struct Rng {
