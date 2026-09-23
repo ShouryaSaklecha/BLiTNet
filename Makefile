@@ -3,7 +3,7 @@ CXXFLAGS := -std=c++17 -O2 -Wall -Wextra -Werror -Isrc -Itests
 BUILD    := build
 HEADERS  := $(wildcard src/*.hpp tests/*.hpp)
 
-TESTS := test_empty test_check
+TESTS := test_empty test_check test_check_near
 
 # build every test, run each one, stop at the first failure
 test: $(TESTS:%=$(BUILD)/%)
