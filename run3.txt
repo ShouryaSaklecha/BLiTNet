@@ -1,0 +1,15 @@
+== BLiTNet / STUNN demonstrator (Stratton et al. 2022) ==
+loading MNIST...
+train=60000  test=10000  input dim=784  mean pixel=0.131
+feature neurons=500  target rates=0.03..0.20
+
+[baseline] ridge on raw pixels        : 86.09%   (3.1s)
+
+training feature layer, unsupervised, 1 epoch...
+  trained      0 / 60000 images
+  trained  10000 / 60000 images
+  trained  20000 / 60000 images
+  trained  30000 / 60000 images
+  trained  40000 / 60000 images
+  trained  50000 / 60000 images
+`
