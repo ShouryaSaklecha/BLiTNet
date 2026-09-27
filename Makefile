@@ -3,11 +3,21 @@ CXXFLAGS := -std=c++17 -O2 -Wall -Wextra -Werror -Isrc -Itests
 BUILD    := build
 HEADERS  := $(wildcard src/*.hpp tests/*.hpp)
 
-TESTS := test_empty test_check test_check_near
+# every tests/test_*.cpp is a test, no list to keep up to date
+TESTS := $(sort $(patsubst tests/%.cpp,%,$(wildcard tests/test_*.cpp)))
 
-# build every test, run each one, stop at the first failure
+# build and run every test; show a test's output only when it fails; summary last
 test: $(TESTS:%=$(BUILD)/%)
-	@for t in $^; do ./$$t || exit 1; done
+	@pass=0; fail=0; \
+	for t in $^; do \
+	  if ./$$t > $$t.log 2>&1; then \
+	    echo "PASS $${t#$(BUILD)/}"; pass=$$((pass + 1)); \
+	  else \
+	    echo "FAIL $${t#$(BUILD)/}"; cat $$t.log; fail=$$((fail + 1)); \
+	  fi; \
+	done; \
+	echo "$$pass passed, $$fail failed"; \
+	[ $$fail -eq 0 ]
 
 $(BUILD)/%: tests/%.cpp $(HEADERS)
 	@mkdir -p $(BUILD)
