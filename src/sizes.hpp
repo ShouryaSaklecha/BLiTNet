@@ -12,4 +12,7 @@ constexpr int kPatchPixels    = kPatch * kPatch;
 constexpr int kPositions      = (kRows - kPatch) / kStride + 1;
 constexpr int kPatchPositions = kPositions * kPositions;
 
+constexpr int kNeuronsPerPos = 16;  // paper: 36
+constexpr int kNeurons       = kPatchPositions * kNeuronsPerPos;
+
 }
