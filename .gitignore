@@ -66,3 +66,14 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+# MNIST, fetched by scripts/fetch-data.sh
+data/
+
+# Vitis HLS logs if run outside build/
+vitis_hls.log
+*.jou
+.Xil/
+
+# Vitis Libraries, fetched by scripts/fetch-vitis-libs.sh
+vendor/

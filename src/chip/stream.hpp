@@ -1,18 +1,26 @@
 #pragma once
-// a fixed-depth FIFO, the C++ stand-in for a hardware stream
+// make test (BN_SOFT_STREAM): a fixed-depth FIFO that flags overflow. HLS tools: the real hls::stream.
+#ifndef BN_SOFT_STREAM
+#include <hls_stream.h>
+#endif
+
 namespace bn {
 
+#ifndef BN_SOFT_STREAM
+template <typename T, int N>
+using Stream = hls::stream<T, N>;
+#else
 template <typename T, int N>
 class Stream {
  public:
-  void push(T v) {
+  void write(const T& v) {
     if (full()) { err_ = true; return; }
     buf_[in_] = v;
     in_ = (in_ + 1) % N;
     ++count_;
   }
 
-  T pop() {
+  T read() {
     if (empty()) { err_ = true; return T{}; }
     T v = buf_[out_];
     out_ = (out_ + 1) % N;
@@ -29,5 +37,6 @@ class Stream {
   int in_ = 0, out_ = 0, count_ = 0;
   bool err_ = false;
 };
+#endif
 
 }
