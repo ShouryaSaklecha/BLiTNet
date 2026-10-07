@@ -14,6 +14,8 @@ constexpr int kPatchPositions = kPositions * kPositions;
 constexpr int kNeuronsPerPos = 16;  // paper: 36
 constexpr int kNeurons       = kPatchPositions * kNeuronsPerPos;
 
+constexpr int kInhib = int(0.015 * kInputs + 0.5);  // paper: probability 0.015
+
 constexpr bool kBinaryPixels  = true;  // paper Ext Fig S8a: "1 bit per pixel"
 constexpr int kPixelThreshold = 128;   // paper silent
 

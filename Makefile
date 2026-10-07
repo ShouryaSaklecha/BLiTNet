@@ -16,14 +16,14 @@ CHIP_SRC := $(wildcard src/chip/*.cpp)
 # every tests/test_*.cpp is a test, no list to keep up to date
 TESTS := $(sort $(patsubst tests/%.cpp,%,$(wildcard tests/test_*.cpp)))
 
-# build and run every test; show a test's output only when it fails; summary last
+# build and run every test; quiet unless something fails (V=1 lists every pass)
 test: $(TESTS:%=$(BUILD)/%)
 	@pass=0; fail=0; \
 	for t in $^; do \
 	  if ./$$t > $$t.log 2>&1; then \
-	    echo "PASS $${t#$(BUILD)/}"; pass=$$((pass + 1)); \
+	    pass=$$((pass + 1)); if [ -n "$(V)" ]; then echo "PASS $${t#$(BUILD)/}"; fi; \
 	  else \
-	    echo "FAIL $${t#$(BUILD)/}"; cat $$t.log; fail=$$((fail + 1)); \
+	    echo "FAIL $${t#$(BUILD)/}"; head -n 20 $$t.log; fail=$$((fail + 1)); \
 	  fi; \
 	done; \
 	echo "$$pass passed, $$fail failed"; \
@@ -31,26 +31,13 @@ test: $(TESTS:%=$(BUILD)/%)
 
 $(BUILD)/%: tests/%.cpp $(HEADERS) $(CHIP_SRC)
 	@mkdir -p $(BUILD)
-	@echo "CXX  $*"
-	@$(CXX) $(CXXFLAGS) -o $@ $< $(CHIP_SRC)
+	@$(CXX) $(CXXFLAGS) -o $@ $< $(CHIP_SRC) 2> $@.err || \
+	  { echo "BUILD FAIL $*"; head -n 15 $@.err; exit 1; }
 
-# Vitis HLS 2023.2 unified flow, set up by hls/hls_config.cfg; output in build/hls
-# csim: C simulation   synth: C to RTL   cosim: RTL simulation against the testbench
-# export: package as a Vivado IP
-HLS_RUN := cd $(BUILD)/hls && $(XILINX_VITIS)/bin
-HLS_CFG := --config ../../hls/hls_config.cfg --work_dir blitnet
-
-$(BUILD)/hls:
-	@mkdir -p $@
-
-csim: | $(BUILD)/hls
-	$(HLS_RUN)/vitis-run --mode hls --csim $(HLS_CFG)
-synth: | $(BUILD)/hls
-	$(HLS_RUN)/v++ -c --mode hls $(HLS_CFG)
-cosim: synth
-	$(HLS_RUN)/vitis-run --mode hls --cosim $(HLS_CFG)
-export: synth
-	$(HLS_RUN)/vitis-run --mode hls --package $(HLS_CFG)
+# Vitis HLS 2023.2 via tools/hls.py: prints a short digest, raw logs stay in build/hls,
+# identical inputs reuse the cached digest (FORCE=1 reruns). Never read build/hls raw files.
+csim synth cosim export:
+	@python3 tools/hls.py run $@ $(if $(FORCE),--force)
 
 clean:
 	rm -rf $(BUILD)
