@@ -1,5 +1,4 @@
 #pragma once
-// every size lives here; nothing else hard-codes one
 namespace bn {
 
 constexpr int kRows   = 28;
@@ -14,5 +13,8 @@ constexpr int kPatchPositions = kPositions * kPositions;
 
 constexpr int kNeuronsPerPos = 16;  // paper: 36
 constexpr int kNeurons       = kPatchPositions * kNeuronsPerPos;
+
+constexpr bool kBinaryPixels  = true;  // paper Ext Fig S8a: "1 bit per pixel"
+constexpr int kPixelThreshold = 128;   // paper silent
 
 }
