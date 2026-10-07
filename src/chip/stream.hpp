@@ -1,5 +1,5 @@
 #pragma once
-// make test (BN_SOFT_STREAM): a fixed-depth FIFO that flags overflow. HLS tools: the real hls::stream.
+// make test uses a FIFO that flags overflow; HLS uses hls::stream
 #ifndef BN_SOFT_STREAM
 #include <hls_stream.h>
 #endif

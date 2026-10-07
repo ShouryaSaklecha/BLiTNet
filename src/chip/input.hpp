@@ -1,7 +1,6 @@
 #pragma once
 #include "sizes.hpp"
 #include "types.hpp"
-// a pixel byte becomes an input neuron's output: 1-bit at a threshold, or greyscale
 namespace bn {
 
 inline Output toInput(Pixel p, bool binary) {

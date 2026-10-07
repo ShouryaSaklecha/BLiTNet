@@ -16,9 +16,9 @@ int main() {
   CHECK(im.pixels.size() == 8 && im.pixels[3] == 255 && im.pixels[4] == 1);
 
   img.pop_back();
-  CHECK(!bn::parseImages(img, im));                 // one pixel short
+  CHECK(!bn::parseImages(img, im));
   img[3] = 0x01;
-  CHECK(!bn::parseImages(img, im));                 // wrong magic number
+  CHECK(!bn::parseImages(img, im));
 
   std::vector<unsigned char> lab;
   put32(lab, 2049); put32(lab, 3);

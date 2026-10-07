@@ -6,7 +6,6 @@
 #include "idx.hpp"
 #include "sizes.hpp"
 #include "top.hpp"
-// host side: MNIST from disk into the chip's input stream
 namespace bn {
 
 inline bool readFile(const std::string& path, Bytes& out) {

@@ -2,7 +2,6 @@
 #include <cstdint>
 #include <vector>
 #include "types.hpp"
-// MNIST's IDX file format; host only
 namespace bn {
 
 using Bytes = std::vector<unsigned char>;

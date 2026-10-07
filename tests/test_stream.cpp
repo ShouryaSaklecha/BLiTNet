@@ -10,18 +10,18 @@ int main() {
   CHECK(s.read() == 1);
   CHECK(s.read() == 2);
 
-  s.write(4);                      // wraps round the end of the buffer
+  s.write(4);
   CHECK(s.read() == 3);
   CHECK(s.read() == 4);
   CHECK(s.empty() && !s.error());
 
   s.read();
-  CHECK(s.error());                // read when empty
+  CHECK(s.error());
 
   bn::Stream<int, 1> t;
   t.write(7); t.write(8);
-  CHECK(t.error());                // write when full
-  CHECK(t.read() == 7);            // the extra value was dropped
+  CHECK(t.error());
+  CHECK(t.read() == 7);
 
   return chk::failures();
 }

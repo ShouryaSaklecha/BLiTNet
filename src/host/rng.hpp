@@ -2,7 +2,6 @@
 #include <random>
 #include <utility>
 #include <vector>
-// host only: rolls the starting values; the chip never needs randomness
 namespace bn {
 
 class Rng {

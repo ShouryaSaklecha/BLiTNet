@@ -5,7 +5,7 @@
 static_assert(bn::kInhib == 12, "0.015 x 784 = 11.76, rounded");
 static_assert((1 << 10) >= bn::kInputs, "10 bits name every pixel");
 
-static bn::Memories m;  // static: too big for the stack, and starts at zero
+static bn::Memories m;
 
 int main() {
   using bn::kCols;

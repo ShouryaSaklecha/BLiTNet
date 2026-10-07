@@ -1,7 +1,6 @@
 #pragma once
 #include "sizes.hpp"
 #include "types.hpp"
-// everything the network learns, one entry per neuron
 namespace bn {
 
 struct Memories {
@@ -12,7 +11,6 @@ struct Memories {
   Rate target[kNeurons];
 };
 
-// image pixel number of the k-th pixel in a neuron's patch
 inline int patchPixel(int neuron, int k) {
   int pos = neuron / kNeuronsPerPos;
   int row = (pos / kPositions) * kStride + k / kPatch;
