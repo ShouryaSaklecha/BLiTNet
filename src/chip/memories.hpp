@@ -8,7 +8,7 @@ struct Memories {
   Weight exc[kNeurons][kPatchPixels];
   PixelIndex inhPixel[kNeurons][kInhib];
   Weight inh[kNeurons][kInhib];
-  Bar threshold[kNeurons];
+  Threshold threshold[kNeurons];
   Rate target[kNeurons];
 };
 
